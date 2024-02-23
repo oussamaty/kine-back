@@ -1,9 +1,23 @@
 package com.kine.Kine.food.service.dto;
 
-import lombok.Getter;
+import java.util.Optional;
 
 public class FoodDTO {
     private long id;
+    private String name;
+    private float calories;
+    private float proteins;
+    private float carbs;
+    private float fat;
+
+    public FoodDTO(long id, String name, float calories, float proteins, float carbs, float fat) {
+        this.id = id;
+        this.name = name;
+        this.calories = calories;
+        this.proteins = proteins;
+        this.carbs = carbs;
+        this.fat = fat;
+    }
 
     public long getId() {
         return id;
@@ -16,22 +30,6 @@ public class FoodDTO {
     public String getName() {
         return name;
     }
-
-    @Getter
-    private String name;
-    private float calories;
-    private float proteins;
-
-    public FoodDTO(long id, String name, float calories, float proteins, float carbs, float fat) {
-        this.id = id;
-        this.name = name;
-        this.calories = calories;
-        this.proteins = proteins;
-        this.carbs = carbs;
-        this.fat = fat;
-    }
-
-    private float carbs;
 
     public void setName(String name) {
         this.name = name;
@@ -69,5 +67,4 @@ public class FoodDTO {
         this.fat = fat;
     }
 
-    private float fat;
 }

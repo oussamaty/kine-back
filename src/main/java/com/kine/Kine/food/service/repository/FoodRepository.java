@@ -7,5 +7,5 @@ import java.util.List;
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
     Iterable<Food> findFoodByName(String name);
-
+    Food findFoodById(long id);
     }
