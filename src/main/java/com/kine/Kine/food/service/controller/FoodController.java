@@ -1,5 +1,5 @@
 package com.kine.Kine.food.service.controller;
-
+import org.springframework.http.HttpStatus;
 import com.kine.Kine.food.service.service.FoodService;
 import com.kine.Kine.food.service.dto.FoodDTO;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,18 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    @GetMapping("/food_all")
-    public Iterable<FoodDTO> getFood_All() {
-        return this.foodService.getFood_All();
+    @GetMapping("/getFood")
+    public Iterable<FoodDTO> getFood(@RequestParam(value = "name", required = false) String name) {
+        if (name != null && !name.isEmpty()) {
+            // If the name parameter is provided, search for food by name
+            return foodService.findFoodByName(name);
+        } else {
+            // If no name parameter is provided, return all food items
+            return foodService.getFood();
+        }
     }
-
+    @PostMapping("/createFood")
+    public FoodDTO createFood(@RequestBody FoodDTO foodDTO) {
+        return foodService.createFood(foodDTO);
+    }
 }

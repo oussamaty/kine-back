@@ -6,6 +6,6 @@ import java.util.List;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    List<Food> findAll();
-    Food findFirstByFood_id(long food_id);
-}
+    Iterable<Food> findFoodByName(String name);
+
+    }

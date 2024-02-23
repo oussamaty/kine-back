@@ -3,14 +3,27 @@ package com.kine.Kine.food.service.dto;
 import lombok.Getter;
 
 public class FoodDTO {
-    private long food_id;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     @Getter
     private String name;
     private float calories;
     private float proteins;
 
-    public FoodDTO(long food_id, String name, float calories, float proteins, float carbs, float fat) {
-        this.food_id = food_id;
+    public FoodDTO(long id, String name, float calories, float proteins, float carbs, float fat) {
+        this.id = id;
         this.name = name;
         this.calories = calories;
         this.proteins = proteins;

@@ -14,11 +14,25 @@ public class FoodService {
     public FoodService(FoodRepository foodRepository){
         this.foodRepository = foodRepository;
     }
-    public Iterable<FoodDTO> getFood_All() {
+    public Iterable<FoodDTO> getFood() {
         Iterable<Food> foundFood = foodRepository.findAll();
         List<FoodDTO> foodList = new ArrayList<>();
         for (Food food : foundFood)
-            foodList.add(new FoodDTO(food.getFood_id(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat()));
+            foodList.add(new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat()));
         return foodList;
     }
+
+    public Iterable<FoodDTO> findFoodByName(String name){
+        Iterable<Food> foundFood = foodRepository.findFoodByName(name);
+        List<FoodDTO> foodList = new ArrayList<>();
+        for (Food food : foundFood)
+            foodList.add(new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat()));
+        return foodList;
+    }
+    public FoodDTO createFood(FoodDTO foodDTO){
+        Food food = foodRepository.save(new Food(foodDTO.getName(), foodDTO.getCalories(), foodDTO.getProteins(), foodDTO.getCarbs(), foodDTO.getFat()));
+        return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
+    }
+
+
 }

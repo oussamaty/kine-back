@@ -14,12 +14,16 @@ import jakarta.persistence.Table;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long food_id;
+    private long id;
     @Column(nullable = false)
     private String name;
+    @Column
     private float calories;
+    @Column
     private float proteins;
+    @Column
     private float carbs;
+    @Column
     private float fat;
 
     public Food(String name, float calories, float proteins, float carbs, float fat) {
@@ -31,12 +35,12 @@ public class Food {
     }
     public Food(){}
 
-    public long getFood_id() {
-        return food_id;
+    public long getId() {
+        return id;
     }
 
-    public void setFood_id(long food_id) {
-        this.food_id = food_id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
