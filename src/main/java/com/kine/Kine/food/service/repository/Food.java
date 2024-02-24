@@ -1,14 +1,18 @@
 package com.kine.Kine.food.service.repository;
 
+import com.kine.Kine.food.service.dto.GetFoodDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 
-
+@Setter
+@Getter
 @Entity
 @Table(name = "Food")
 public class Food {
@@ -33,54 +37,16 @@ public class Food {
         this.carbs = carbs;
         this.fat = fat;
     }
-    public Food(){}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public Food(long id, String name, float calories, float proteins, float carbs, float fat) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public float getCalories() {
-        return calories;
-    }
-
-    public void setCalories(float calories) {
         this.calories = calories;
-    }
-
-    public float getProteins() {
-        return proteins;
-    }
-
-    public void setProteins(float proteins) {
         this.proteins = proteins;
-    }
-
-    public float getCarbs() {
-        return carbs;
-    }
-
-    public void setCarbs(float carbs) {
         this.carbs = carbs;
-    }
-
-    public float getFat() {
-        return fat;
-    }
-
-    public void setFat(float fat) {
         this.fat = fat;
     }
-
+    public Food(){}
+    public GetFoodDTO ConvertToGETFoodDTO(){
+        return new GetFoodDTO(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
+    }
 }

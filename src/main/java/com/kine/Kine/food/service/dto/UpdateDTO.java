@@ -1,7 +1,10 @@
 package com.kine.Kine.food.service.dto;
 
+import lombok.Getter;
+
 import java.util.Optional;
 
+@Getter
 public class UpdateDTO {
     private Optional<String> name;
     private Optional<Float> calories;
@@ -17,40 +20,20 @@ public class UpdateDTO {
         this.fat = fat;
     }
 
-    public Optional<String> getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = Optional.ofNullable(name);
-    }
-
-    public Optional<Float> getCalories() {
-        return calories;
     }
 
     public void setCalories(Float calories) {
         this.calories = Optional.ofNullable(calories);
     }
 
-    public Optional<Float> getProteins() {
-        return proteins;
-    }
-
     public void setProteins(Float proteins) {
         this.proteins = Optional.ofNullable(proteins);
     }
 
-    public Optional<Float> getCarbs() {
-        return carbs;
-    }
-
     public void setCarbs(Float carbs) {
         this.carbs = Optional.ofNullable(carbs);
-    }
-
-    public Optional<Float> getFat() {
-        return fat;
     }
 
     public void setFat(Float fat) {
