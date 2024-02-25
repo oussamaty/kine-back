@@ -3,10 +3,14 @@ import com.kine.Kine.food.service.dto.CreateFoodDTO;
 import com.kine.Kine.food.service.dto.UpdateDTO;
 import com.kine.Kine.food.service.service.FoodService;
 import com.kine.Kine.food.service.dto.FoodDTO;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.kine.Kine.food.service.dto.GetFoodDTO;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 
@@ -18,39 +22,62 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-
-    @GetMapping("/getFood")
-    public ResponseEntity<Iterable<GetFoodDTO>> getFood(@RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "id", required = false) Long id) {
-        if (id != null) {
-            Iterable<GetFoodDTO> foundFood = foodService.findFoodById(id);
-            // If the id parameter is provided, search for food by ID
-            if(foundFood.iterator().hasNext()) {
-                return ResponseEntity.status(HttpStatus.FOUND).body(foundFood);
-            }
-            else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(foundFood);
-            }
-        } else if (name != null && !name.isEmpty()) {
-            // If the name parameter is provided, search for food by name
-            return ResponseEntity.status(HttpStatus.FOUND).body(foodService.findFoodByName(name));
-        } else {
-            // If neither id nor name parameter is provided, return all food items
-            return ResponseEntity.status(HttpStatus.FOUND).body(foodService.getFood());
+    @GetMapping(value = "{id}")
+    public ResponseEntity<GetFoodDTO > searchFoodById(@PathVariable(value = "id") Long id) {
+        try{
+            return ResponseEntity.status(HttpStatus.FOUND).body(foodService.findFoodById(id));
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GetFoodDTO());
         }
     }
 
-    @PostMapping("/createFood")
-    public ResponseEntity<CreateFoodDTO> createFood(@RequestBody CreateFoodDTO createFoodDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
-    }
-    @PutMapping("/{id}")
-    public FoodDTO updateFood(@PathVariable(value = "id") Long id,
-                                            @RequestBody UpdateDTO newFoodData) {
-        return foodService.updateFood(id, newFoodData);
+
+    @GetMapping(value = "{name}")
+    public ResponseEntity<Page<GetFoodDTO>> searchFoodByName(
+            @PathVariable(value = "name") String name,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<GetFoodDTO> foods = foodService.findFoodByName(name, pageable);
+            return ResponseEntity.status(HttpStatus.OK).body(foods);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Page.empty());
+        }
     }
 
-    @DeleteMapping("/deleteFood/{id}")
+    @GetMapping
+    public ResponseEntity<Page<GetFoodDTO>> getFood(@RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size) {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<GetFoodDTO> foodPage = foodService.getFood(pageable);
+            return ResponseEntity.status(HttpStatus.FOUND).body(foodPage);
+        }
+
+
+    @PostMapping
+    public ResponseEntity<CreateFoodDTO> createFood(@RequestBody CreateFoodDTO createFoodDTO) {
+        try{
+            return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(createFoodDTO, HttpStatus.CONFLICT);
+        }
+
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<FoodDTO> updateFood(@PathVariable(value = "id") Long id,
+                                            @RequestBody UpdateDTO newFoodData) {
+        try{
+            return new ResponseEntity<>(foodService.updateFood(id, newFoodData), HttpStatus.ACCEPTED);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(new FoodDTO(), HttpStatus.CONFLICT);
+    }
+
+    }
+
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteFood(@PathVariable Long id) {
         try {
             foodService.deleteFoodById(id);

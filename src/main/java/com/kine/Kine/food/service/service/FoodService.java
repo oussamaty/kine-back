@@ -11,42 +11,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 @Service
 public class FoodService {
     private final FoodRepository foodRepository;
+
     @Autowired
     public FoodService(FoodRepository foodRepository){
         this.foodRepository = foodRepository;
     }
-    public Iterable<GetFoodDTO> getFood() {
-        Iterable<Food> foundFood = foodRepository.findAll();
-        List<GetFoodDTO> foodList = new ArrayList<>();
-        for (Food food : foundFood)
-            foodList.add( food.ConvertToGETFoodDTO() );
-        return foodList;
+    public Page<GetFoodDTO> getFood(Pageable pageable) {
+        Page<Food> foodPage = foodRepository.findAll(pageable);
+        return foodPage.map(Food::ConvertToGETFoodDTO);
     }
 
-    public Iterable<GetFoodDTO> findFoodByName(String name){
-        Iterable<Food> foundFood = foodRepository.findFoodByName(name);
-        List<GetFoodDTO> foodList = new ArrayList<>();
-        for (Food food : foundFood)
-            foodList.add(food.ConvertToGETFoodDTO());
-        return foodList;
+
+    public Page<GetFoodDTO> findFoodByName(String name, Pageable pageable) {
+        Page<Food> foundFood = foodRepository.findFoodByName(name, pageable);
+        return foundFood.map(Food::ConvertToGETFoodDTO);
     }
-    public Iterable<GetFoodDTO> findFoodById(long id){
-        try {
-            Food foundFood = foodRepository.findFoodById(id);
-            List<GetFoodDTO> foodList = new ArrayList<>();
-            foodList.add(foundFood.ConvertToGETFoodDTO());
-            return foodList;
-        }catch (Exception e){
-            return new ArrayList<>();
-        }
+    public GetFoodDTO findFoodById(long id){
+        return foodRepository.findFoodById(id).ConvertToGETFoodDTO();
     }
     public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO){
-        Food food = foodRepository.save(createFoodDTO.ConvertToFood());
-        return food.ConvertToCreateFoodDTO();
+
+        Food food = createFoodDTO.ConvertToFood();
+        // Check if a food item with the same details already exists
+        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat())){
+            throw new RuntimeException();
+        }
+        if (!isCaloriesRelationValid(food)) {
+            throw new RuntimeException();
+        }
+        return foodRepository.save(food).ConvertToCreateFoodDTO();
     }
 
     public FoodDTO updateFood(Long id, UpdateDTO newFoodData) {
@@ -69,7 +67,9 @@ public class FoodService {
         if (newFoodData.getFat().isPresent()) {
             existingFood.setFat(newFoodData.getFat().get());
         }
-
+        if (!isCaloriesRelationValid(existingFood)) {
+            throw new RuntimeException();
+        }
         Food food = foodRepository.save(existingFood);
         return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
     }
@@ -81,6 +81,10 @@ public class FoodService {
             throw new NoSuchElementException();
         }
     }
-
+    private boolean isCaloriesRelationValid(Food food) {
+        double calculatedCalories = (food.getCarbs() * 4) + (food.getProteins() * 4) + (food.getFat() * 9);
+        // Check if the calculated calories match the provided calories within a small tolerance
+        return Math.abs(calculatedCalories - food.getCalories()) < 0.01;
+    }
 
 }

@@ -1,13 +1,14 @@
 package com.kine.Kine.food.service.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.kine.Kine.food.service.repository.Food;
-import java.util.List;
-import java.util.NoSuchElementException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    Iterable<Food> findFoodByName(String name);
+    Page<Food> findFoodByName(String name,Pageable pageable );
 
     Food findFoodById(long id);
+
+    boolean existsByNameAndCaloriesAndProteinsAndCarbsAndFat(String name, double calories, double proteins, double carbs, double fat);
 }
