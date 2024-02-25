@@ -1,7 +1,5 @@
 package com.kine.Kine.food.service.dto;
-
 import lombok.Getter;
-
 import java.util.Optional;
 
 @Getter

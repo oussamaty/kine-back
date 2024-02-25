@@ -1,15 +1,12 @@
 package com.kine.Kine.food.service.service;
+import com.kine.Kine.food.service.dto.CreateFoodDTO;
 import com.kine.Kine.food.service.dto.GetFoodDTO;
 import com.kine.Kine.food.service.dto.UpdateDTO;
-
 import com.kine.Kine.food.service.repository.FoodRepository;
 import com.kine.Kine.food.service.repository.Food;
-import jakarta.persistence.Id;
 import org.springframework.stereotype.Service;
 import com.kine.Kine.food.service.dto.FoodDTO;
-import org.springframework.data.domain.Example;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.BeanUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -47,9 +44,9 @@ public class FoodService {
             return new ArrayList<>();
         }
     }
-    public FoodDTO createFood(FoodDTO foodDTO){
-        Food food = foodRepository.save(new Food(foodDTO.getName(), foodDTO.getCalories(), foodDTO.getProteins(), foodDTO.getCarbs(), foodDTO.getFat()));
-        return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
+    public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO){
+        Food food = foodRepository.save(createFoodDTO.ConvertToFood());
+        return food.ConvertToCreateFoodDTO();
     }
 
     public FoodDTO updateFood(Long id, UpdateDTO newFoodData) {
@@ -81,7 +78,7 @@ public class FoodService {
         if (foodOptional.isPresent()) {
             foodRepository.deleteById(id);
         } else {
-            throw new NoSuchElementException("Food item with id " + id + " not found");
+            throw new NoSuchElementException();
         }
     }
 

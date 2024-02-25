@@ -1,4 +1,5 @@
 package com.kine.Kine.food.service.controller;
+import com.kine.Kine.food.service.dto.CreateFoodDTO;
 import com.kine.Kine.food.service.dto.UpdateDTO;
 import com.kine.Kine.food.service.service.FoodService;
 import com.kine.Kine.food.service.dto.FoodDTO;
@@ -6,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import com.kine.Kine.food.service.dto.GetFoodDTO;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.NoSuchElementException;
 
 
@@ -41,8 +41,8 @@ public class FoodController {
     }
 
     @PostMapping("/createFood")
-    public FoodDTO createFood(@RequestBody FoodDTO foodDTO) {
-        return foodService.createFood(foodDTO);
+    public ResponseEntity<CreateFoodDTO> createFood(@RequestBody CreateFoodDTO createFoodDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
     }
     @PutMapping("/{id}")
     public FoodDTO updateFood(@PathVariable(value = "id") Long id,

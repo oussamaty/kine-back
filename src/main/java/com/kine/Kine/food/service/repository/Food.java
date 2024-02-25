@@ -1,5 +1,5 @@
 package com.kine.Kine.food.service.repository;
-
+import com.kine.Kine.food.service.dto.CreateFoodDTO;
 import com.kine.Kine.food.service.dto.GetFoodDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,5 +48,9 @@ public class Food {
     public Food(){}
     public GetFoodDTO ConvertToGETFoodDTO(){
         return new GetFoodDTO(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
+    }
+
+    public CreateFoodDTO ConvertToCreateFoodDTO(){
+        return new CreateFoodDTO(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
     }
 }
