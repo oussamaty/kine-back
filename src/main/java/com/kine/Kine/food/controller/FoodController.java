@@ -100,7 +100,7 @@ public class FoodController {
     public ResponseEntity<?> deleteFood(@PathVariable Long id) {
         try {
             foodService.deleteFoodById(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());

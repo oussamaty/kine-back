@@ -82,7 +82,7 @@ public class FoodService {
             throw new InvalidDataException("Invalid data");
         }
         if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(existingFood.getName(), existingFood.getCalories(), existingFood.getProteins(), existingFood.getCarbs(), existingFood.getFat())) {
-            throw new RessourceAlreadyExistException("Food already exists");
+            throw new RessourceAlreadyExistException("Food already exists, delete the food with the id " + id + " or keep it and use the already existing one.");
         }
         Food food = foodRepository.save(existingFood);
         return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
