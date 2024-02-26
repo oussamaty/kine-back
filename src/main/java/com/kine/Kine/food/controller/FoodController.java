@@ -47,7 +47,7 @@ public class FoodController {
             } else {
                 return ResponseEntity.status(HttpStatus.FOUND).body(foodService.getFood(pageable));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(e.getMessage());
         }
@@ -57,13 +57,13 @@ public class FoodController {
 
     @PostMapping
     public ResponseEntity<?> createFood(@RequestBody CreateFoodDTO createFoodDTO) {
-        try{
+        try {
             return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
-        }catch (RessourceAlreadyExistException e){
+        } catch (RessourceAlreadyExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }catch (InvalidDataException e){
+        } catch (InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
     }
@@ -75,14 +75,14 @@ public class FoodController {
         try{
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(foodService.updateFood(id, newFoodData));
 
-        }catch (RessourceAlreadyExistException e){
+        } catch (RessourceAlreadyExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }catch (InvalidDataException e){
+        } catch (InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); // Return meaningful response body
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
@@ -92,10 +92,10 @@ public class FoodController {
         try {
             foodService.deleteFoodById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
     }
