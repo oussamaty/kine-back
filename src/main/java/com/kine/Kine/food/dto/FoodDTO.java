@@ -24,6 +24,5 @@ public class FoodDTO {
         this.fat = fat;
     }
 
-    public FoodDTO(){};
 
 }
