@@ -1,6 +1,6 @@
-package com.kine.Kine.food.service.repository;
-import com.kine.Kine.food.service.dto.CreateFoodDTO;
-import com.kine.Kine.food.service.dto.GetFoodDTO;
+package com.kine.Kine.food.repository;
+import com.kine.Kine.food.dto.CreateFoodDTO;
+import com.kine.Kine.food.dto.GetFoodDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

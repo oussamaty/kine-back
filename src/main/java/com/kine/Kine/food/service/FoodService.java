@@ -1,15 +1,14 @@
-package com.kine.Kine.food.service.service;
-import com.kine.Kine.food.service.dto.CreateFoodDTO;
-import com.kine.Kine.food.service.dto.GetFoodDTO;
-import com.kine.Kine.food.service.dto.UpdateDTO;
-import com.kine.Kine.food.service.repository.FoodRepository;
-import com.kine.Kine.food.service.repository.Food;
+package com.kine.Kine.food.service;
+import com.kine.Kine.food.dto.CreateFoodDTO;
+import com.kine.Kine.food.dto.GetFoodDTO;
+import com.kine.Kine.food.dto.UpdateDTO;
+import com.kine.Kine.food.repository.FoodRepository;
+import com.kine.Kine.food.repository.Food;
 import org.springframework.stereotype.Service;
-import com.kine.Kine.food.service.dto.FoodDTO;
+import com.kine.Kine.food.dto.FoodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import com.kine.Kine.food.exception.*;
+
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,27 +30,36 @@ public class FoodService {
         Page<Food> foundFood = foodRepository.findFoodByName(name, pageable);
         return foundFood.map(Food::ConvertToGETFoodDTO);
     }
-    public GetFoodDTO findFoodById(long id){
-        return foodRepository.findFoodById(id).ConvertToGETFoodDTO();
+    public GetFoodDTO findFoodById(long id) throws RessourceNotFoundException {
+        Optional<Food> foundFood = foodRepository.findFoodById(id);
+        if(foundFood.isEmpty()){
+            throw new RessourceNotFoundException("Food with ID " + id + " not found");
+        }
+        return foundFood.get().ConvertToGETFoodDTO();
     }
-    public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO){
+    public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO) throws RessourceAlreadyExistException, InvalidDataException{
 
         Food food = createFoodDTO.ConvertToFood();
         // Check if a food item with the same details already exists
         if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat())){
-            throw new RuntimeException();
+            throw new RessourceAlreadyExistException("Food already exists");
         }
-        if (!isCaloriesRelationValid(food)) {
-            throw new RuntimeException();
+        if (isNotCaloriesRelationValid(food)) {
+            throw new InvalidDataException("Invalid data");
         }
         return foodRepository.save(food).ConvertToCreateFoodDTO();
     }
 
-    public FoodDTO updateFood(Long id, UpdateDTO newFoodData) {
-        Food existingFood = foodRepository.findFoodById(id);
+    public FoodDTO updateFood(Long id, UpdateDTO newFoodData) throws RessourceNotFoundException, RessourceAlreadyExistException, InvalidDataException {
+
+        Optional<Food> existingFoodOptional = foodRepository.findFoodById(id);
+        if (existingFoodOptional.isEmpty()){
+            throw new RessourceNotFoundException("Food with ID "  + id +  " not found");
+        }
+
+        Food existingFood = existingFoodOptional.get();
 
         // Update only the fields that are provided in the newFoodData object
-
         if (newFoodData.getName().isPresent()) {
             existingFood.setName(newFoodData.getName().get());
         }
@@ -67,24 +75,28 @@ public class FoodService {
         if (newFoodData.getFat().isPresent()) {
             existingFood.setFat(newFoodData.getFat().get());
         }
-        if (!isCaloriesRelationValid(existingFood)) {
-            throw new RuntimeException();
+
+        if (isNotCaloriesRelationValid(existingFood)) {
+            throw new InvalidDataException("Invalid data");
+        }
+        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(existingFood.getName(), existingFood.getCalories(), existingFood.getProteins(), existingFood.getCarbs(), existingFood.getFat())){
+            throw new RessourceAlreadyExistException("Food already exists");
         }
         Food food = foodRepository.save(existingFood);
         return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
     }
-    public void deleteFoodById(Long id) {
+    public void deleteFoodById(Long id) throws RessourceNotFoundException {
         Optional<Food> foodOptional = foodRepository.findById(id);
         if (foodOptional.isPresent()) {
             foodRepository.deleteById(id);
         } else {
-            throw new NoSuchElementException();
+            throw new RessourceNotFoundException("Food with ID " + id + " not found");
         }
     }
-    private boolean isCaloriesRelationValid(Food food) {
+    private boolean isNotCaloriesRelationValid(Food food) {
         double calculatedCalories = (food.getCarbs() * 4) + (food.getProteins() * 4) + (food.getFat() * 9);
         // Check if the calculated calories match the provided calories within a small tolerance
-        return Math.abs(calculatedCalories - food.getCalories()) < 0.01;
+        return !(Math.abs(calculatedCalories - food.getCalories()) < 0.01);
     }
 
 }

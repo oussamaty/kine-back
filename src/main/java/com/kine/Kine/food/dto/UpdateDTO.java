@@ -1,4 +1,4 @@
-package com.kine.Kine.food.service.dto;
+package com.kine.Kine.food.dto;
 import lombok.Getter;
 import java.util.Optional;
 

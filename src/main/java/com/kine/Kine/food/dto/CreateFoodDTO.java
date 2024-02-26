@@ -1,5 +1,5 @@
-package com.kine.Kine.food.service.dto;
-import com.kine.Kine.food.service.repository.Food;
+package com.kine.Kine.food.dto;
+import com.kine.Kine.food.repository.Food;
 import lombok.Getter;
 import lombok.Setter;
 
