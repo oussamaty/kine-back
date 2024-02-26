@@ -98,7 +98,7 @@ public class FoodService {
     }
 
     private boolean isNotCaloriesRelationValid(Food food) {
-        double calculatedCalories = (food.getCarbs() * 4) + (food.getProteins() * 4) + (food.getFat() * 9);
+        float calculatedCalories = (food.getCarbs() * 4) + (food.getProteins() * 4) + (food.getFat() * 9);
         // Check if the calculated calories match the provided calories within a small tolerance
         return !(Math.abs(calculatedCalories - food.getCalories()) < 0.01);
     }
