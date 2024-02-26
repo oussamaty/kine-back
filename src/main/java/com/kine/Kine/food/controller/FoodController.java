@@ -26,7 +26,7 @@ public class FoodController {
     public ResponseEntity<?> getFoodById(@PathVariable(value = "id") Long id) {
         try {
             GetFoodDTO foodDTO = foodService.findFoodById(id);
-            return ResponseEntity.ok(foodDTO); // Return OK status with the found resource
+            return ResponseEntity.status(HttpStatus.OK).body(foodDTO); // Return OK status with the found resource
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage()); // Return meaningful response body
@@ -61,31 +61,30 @@ public class FoodController {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
         }catch (RessourceAlreadyExistException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (InvalidDataException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
     }
-
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateFood(@PathVariable(value = "id") Long id,
                                             @RequestBody UpdateDTO newFoodData) {
         try{
-            return new ResponseEntity<>(foodService.updateFood(id, newFoodData), HttpStatus.ACCEPTED);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(foodService.updateFood(id, newFoodData));
 
         }catch (RessourceAlreadyExistException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (InvalidDataException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); // Return meaningful response body
         }catch (RuntimeException e){
-            return new ResponseEntity<>(new FoodDTO(), HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
