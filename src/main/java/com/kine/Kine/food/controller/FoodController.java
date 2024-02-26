@@ -23,7 +23,7 @@ public class FoodController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> searchFoodById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<?> getFoodById(@PathVariable(value = "id") Long id) {
         try {
             GetFoodDTO foodDTO = foodService.findFoodById(id);
             return ResponseEntity.ok(foodDTO); // Return OK status with the found resource
