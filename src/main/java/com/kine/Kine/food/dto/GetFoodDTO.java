@@ -20,7 +20,6 @@ public class GetFoodDTO {
         this.fat = fat;
     }
 
-    public GetFoodDTO(){};
 
     public Food ConvertToFood(){
         return new Food(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
