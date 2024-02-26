@@ -32,7 +32,7 @@ public class FoodService {
 
     public GetFoodDTO findFoodById(long id) throws ResourceNotFoundException {
         Optional<Food> foundFood = foodRepository.findFoodById(id);
-        if(foundFood.isEmpty()){
+        if (foundFood.isEmpty()) {
             throw new ResourceNotFoundException("Food with ID " + id + " not found");
         }
         return GetFoodDTO.ConvertToGETFoodDTO(foundFood.get());
@@ -42,7 +42,7 @@ public class FoodService {
 
         Food food = createFoodDTO.ConvertToFood();
         // Check if a food item with the same details already exists
-        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat())){
+        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat())) {
             throw new RessourceAlreadyExistException("Food already exists");
         }
         if (isNotCaloriesRelationValid(food)) {
@@ -55,7 +55,7 @@ public class FoodService {
 
         Optional<Food> existingFoodOptional = foodRepository.findFoodById(id);
 
-        if (existingFoodOptional.isEmpty()){
+        if (existingFoodOptional.isEmpty()) {
             throw new ResourceNotFoundException("Food with ID "  + id +  " not found");
         }
 
@@ -81,7 +81,7 @@ public class FoodService {
         if (isNotCaloriesRelationValid(existingFood)) {
             throw new InvalidDataException("Invalid data");
         }
-        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(existingFood.getName(), existingFood.getCalories(), existingFood.getProteins(), existingFood.getCarbs(), existingFood.getFat())){
+        if (foodRepository.existsByNameAndCaloriesAndProteinsAndCarbsAndFat(existingFood.getName(), existingFood.getCalories(), existingFood.getProteins(), existingFood.getCarbs(), existingFood.getFat())) {
             throw new RessourceAlreadyExistException("Food already exists");
         }
         Food food = foodRepository.save(existingFood);

@@ -74,7 +74,6 @@ public class FoodController {
                                             @RequestBody UpdateDTO newFoodData) {
         try{
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(foodService.updateFood(id, newFoodData));
-
         } catch (RessourceAlreadyExistException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (InvalidDataException e) {

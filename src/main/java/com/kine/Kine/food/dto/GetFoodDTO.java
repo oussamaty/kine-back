@@ -21,11 +21,11 @@ public class GetFoodDTO {
     }
 
 
-    public Food ConvertToFood(){
+    public Food ConvertToFood() {
         return new Food(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
     }
 
-    public static GetFoodDTO ConvertToGETFoodDTO(Food food){
+    public static GetFoodDTO ConvertToGETFoodDTO(Food food) {
         return new GetFoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
     }
 }
