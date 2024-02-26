@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import com.kine.Kine.food.dto.FoodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.kine.Kine.food.exception.*;
-
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 @Service
 public class FoodService {
     private final FoodRepository foodRepository;
@@ -25,11 +25,11 @@ public class FoodService {
         return foodPage.map(Food::ConvertToGETFoodDTO);
     }
 
-
     public Page<GetFoodDTO> findFoodByName(String name, Pageable pageable) {
         Page<Food> foundFood = foodRepository.findFoodByName(name, pageable);
         return foundFood.map(Food::ConvertToGETFoodDTO);
     }
+
     public GetFoodDTO findFoodById(long id) throws RessourceNotFoundException {
         Optional<Food> foundFood = foodRepository.findFoodById(id);
         if(foundFood.isEmpty()){
@@ -37,6 +37,7 @@ public class FoodService {
         }
         return foundFood.get().ConvertToGETFoodDTO();
     }
+
     public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO) throws RessourceAlreadyExistException, InvalidDataException{
 
         Food food = createFoodDTO.ConvertToFood();
@@ -53,6 +54,7 @@ public class FoodService {
     public FoodDTO updateFood(Long id, UpdateDTO newFoodData) throws RessourceNotFoundException, RessourceAlreadyExistException, InvalidDataException {
 
         Optional<Food> existingFoodOptional = foodRepository.findFoodById(id);
+
         if (existingFoodOptional.isEmpty()){
             throw new RessourceNotFoundException("Food with ID "  + id +  " not found");
         }
@@ -85,6 +87,7 @@ public class FoodService {
         Food food = foodRepository.save(existingFood);
         return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
     }
+
     public void deleteFoodById(Long id) throws RessourceNotFoundException {
         Optional<Food> foodOptional = foodRepository.findById(id);
         if (foodOptional.isPresent()) {
@@ -93,6 +96,7 @@ public class FoodService {
             throw new RessourceNotFoundException("Food with ID " + id + " not found");
         }
     }
+
     private boolean isNotCaloriesRelationValid(Food food) {
         double calculatedCalories = (food.getCarbs() * 4) + (food.getProteins() * 4) + (food.getFat() * 9);
         // Check if the calculated calories match the provided calories within a small tolerance
