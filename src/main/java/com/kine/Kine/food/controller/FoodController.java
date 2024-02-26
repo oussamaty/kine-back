@@ -9,13 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @RestController
 @RequestMapping("/api/food")
 public class FoodController {
     private final FoodService foodService;
+    private static final Logger logger = LoggerFactory.getLogger(FoodController.class);
     public FoodController(FoodService foodService){
         this.foodService = foodService;
     }
@@ -30,8 +32,10 @@ public class FoodController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage()); // Return meaningful response body
         } catch (Exception e) {
+            // Log the exception internally for debugging purposes
+            logger.error("An error occurred while retrieving food with ID: {}", id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage()); // Handle other exceptions
+                    .body("An unexpected error occurred"); // Return generic error message to the client
         }
     }
 
@@ -48,10 +52,11 @@ public class FoodController {
                 return ResponseEntity.status(HttpStatus.FOUND).body(foodService.getFood(pageable));
             }
         } catch (Exception e) {
+            // Log the exception internally for debugging purposes
+            logger.error("An error occurred while retrieving food ", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
+                    .body("An unexpected error occurred"); // Return generic error message to the client
         }
-
     }
 
 
@@ -64,9 +69,11 @@ public class FoodController {
         } catch (InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e.getMessage());
-    }
+            // Log the exception internally for debugging purposes
+            logger.error("An error occurred while creating the food : {}", createFoodDTO, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred"); // Return generic error message to the client
+        }
     }
 
     @PutMapping("/{id}")
@@ -81,8 +88,11 @@ public class FoodController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); // Return meaningful response body
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            // Log the exception internally for debugging purposes
+            logger.error("An error occurred while creating the food : {}, with the new data: {}", id, newFoodData , e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred"); // Return generic error message to the client
         }
     }
 
@@ -94,8 +104,11 @@ public class FoodController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
-        } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-    }
+        } catch (Exception e) {
+            // Log the exception internally for debugging purposes
+            logger.error("An error occurred while deleting the food : {}", id , e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred"); // Return generic error message to the client
+        }
     }
 }
