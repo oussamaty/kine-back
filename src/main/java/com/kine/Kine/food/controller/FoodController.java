@@ -49,7 +49,7 @@ public class FoodController {
             if (name != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(foodService.findFoodByName(name, pageable));
             } else {
-                return ResponseEntity.status(HttpStatus.FOUND).body(foodService.getFood(pageable));
+                return ResponseEntity.status(HttpStatus.OK).body(foodService.getFood(pageable));
             }
         } catch (Exception e) {
             // Log the exception internally for debugging purposes
