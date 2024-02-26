@@ -61,9 +61,9 @@ public class FoodController {
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
         }catch (RessourceAlreadyExistException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (InvalidDataException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (Exception e){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
@@ -78,9 +78,9 @@ public class FoodController {
             return new ResponseEntity<>(foodService.updateFood(id, newFoodData), HttpStatus.ACCEPTED);
 
         }catch (RessourceAlreadyExistException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (InvalidDataException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (RessourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); // Return meaningful response body
