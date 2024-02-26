@@ -4,7 +4,6 @@ import com.kine.Kine.food.dto.GetFoodDTO;
 import com.kine.Kine.food.dto.UpdateDTO;
 import com.kine.Kine.food.exception.*;
 import com.kine.Kine.food.service.FoodService;
-import com.kine.Kine.food.dto.FoodDTO;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class FoodController {
         try {
             GetFoodDTO foodDTO = foodService.findFoodById(id);
             return ResponseEntity.status(HttpStatus.OK).body(foodDTO); // Return OK status with the found resource
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage()); // Return meaningful response body
         } catch (Exception e) {
@@ -80,7 +79,7 @@ public class FoodController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (InvalidDataException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (RessourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage()); // Return meaningful response body
         }catch (RuntimeException e){
@@ -93,7 +92,7 @@ public class FoodController {
         try {
             foodService.deleteFoodById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }catch (RessourceNotFoundException e) {
+        }catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }catch (RuntimeException e){

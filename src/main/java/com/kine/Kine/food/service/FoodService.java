@@ -30,10 +30,10 @@ public class FoodService {
         return foundFood.map(Food::ConvertToGETFoodDTO);
     }
 
-    public GetFoodDTO findFoodById(long id) throws RessourceNotFoundException {
+    public GetFoodDTO findFoodById(long id) throws ResourceNotFoundException {
         Optional<Food> foundFood = foodRepository.findFoodById(id);
         if(foundFood.isEmpty()){
-            throw new RessourceNotFoundException("Food with ID " + id + " not found");
+            throw new ResourceNotFoundException("Food with ID " + id + " not found");
         }
         return foundFood.get().ConvertToGETFoodDTO();
     }
@@ -51,12 +51,12 @@ public class FoodService {
         return foodRepository.save(food).ConvertToCreateFoodDTO();
     }
 
-    public FoodDTO updateFood(Long id, UpdateDTO newFoodData) throws RessourceNotFoundException, RessourceAlreadyExistException, InvalidDataException {
+    public FoodDTO updateFood(Long id, UpdateDTO newFoodData) throws ResourceNotFoundException, RessourceAlreadyExistException, InvalidDataException {
 
         Optional<Food> existingFoodOptional = foodRepository.findFoodById(id);
 
         if (existingFoodOptional.isEmpty()){
-            throw new RessourceNotFoundException("Food with ID "  + id +  " not found");
+            throw new ResourceNotFoundException("Food with ID "  + id +  " not found");
         }
 
         Food existingFood = existingFoodOptional.get();
@@ -88,12 +88,12 @@ public class FoodService {
         return new FoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
     }
 
-    public void deleteFoodById(Long id) throws RessourceNotFoundException {
+    public void deleteFoodById(Long id) throws ResourceNotFoundException {
         Optional<Food> foodOptional = foodRepository.findById(id);
         if (foodOptional.isPresent()) {
             foodRepository.deleteById(id);
         } else {
-            throw new RessourceNotFoundException("Food with ID " + id + " not found");
+            throw new ResourceNotFoundException("Food with ID " + id + " not found");
         }
     }
 
