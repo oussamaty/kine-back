@@ -22,12 +22,12 @@ public class FoodService {
     }
     public Page<GetFoodDTO> getFood(Pageable pageable) {
         Page<Food> foodPage = foodRepository.findAll(pageable);
-        return foodPage.map(Food::ConvertToGETFoodDTO);
+        return foodPage.map(GetFoodDTO::ConvertToGETFoodDTO);
     }
 
     public Page<GetFoodDTO> findFoodByName(String name, Pageable pageable) {
         Page<Food> foundFood = foodRepository.findFoodByName(name, pageable);
-        return foundFood.map(Food::ConvertToGETFoodDTO);
+        return foundFood.map(GetFoodDTO::ConvertToGETFoodDTO);
     }
 
     public GetFoodDTO findFoodById(long id) throws ResourceNotFoundException {
@@ -35,7 +35,7 @@ public class FoodService {
         if(foundFood.isEmpty()){
             throw new ResourceNotFoundException("Food with ID " + id + " not found");
         }
-        return foundFood.get().ConvertToGETFoodDTO();
+        return GetFoodDTO.ConvertToGETFoodDTO(foundFood.get());
     }
 
     public CreateFoodDTO createFood(CreateFoodDTO createFoodDTO) throws RessourceAlreadyExistException, InvalidDataException{
@@ -48,7 +48,7 @@ public class FoodService {
         if (isNotCaloriesRelationValid(food)) {
             throw new InvalidDataException("Invalid data");
         }
-        return foodRepository.save(food).ConvertToCreateFoodDTO();
+        return CreateFoodDTO.ConvertToCreateFoodDTO(foodRepository.save(food));
     }
 
     public FoodDTO updateFood(Long id, UpdateDTO newFoodData) throws ResourceNotFoundException, RessourceAlreadyExistException, InvalidDataException {
@@ -102,5 +102,6 @@ public class FoodService {
         // Check if the calculated calories match the provided calories within a small tolerance
         return !(Math.abs(calculatedCalories - food.getCalories()) < 0.01);
     }
+
 
 }

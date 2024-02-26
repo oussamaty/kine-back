@@ -30,13 +30,6 @@ public class Food {
     @Column
     private float fat;
 
-    public Food(String name, float calories, float proteins, float carbs, float fat) {
-        this.name = name;
-        this.calories = calories;
-        this.proteins = proteins;
-        this.carbs = carbs;
-        this.fat = fat;
-    }
     public Food(long id, String name, float calories, float proteins, float carbs, float fat) {
         this.id = id;
         this.name = name;
@@ -45,13 +38,10 @@ public class Food {
         this.carbs = carbs;
         this.fat = fat;
     }
-    public Food(){}
-    public GetFoodDTO ConvertToGETFoodDTO(){
-        return new GetFoodDTO(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
+
+    public Food() {
+
     }
 
-    public CreateFoodDTO ConvertToCreateFoodDTO(){
-        return new CreateFoodDTO(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
-    }
 
 }

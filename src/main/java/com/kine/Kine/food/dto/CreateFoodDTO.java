@@ -27,4 +27,7 @@ public class CreateFoodDTO {
     public Food ConvertToFood(){
         return new Food(this.getId(), this.getName(), this.getCalories(), this.getProteins(), this.getCarbs(), this.getFat());
     }
+    public static CreateFoodDTO ConvertToCreateFoodDTO(Food food){
+        return new CreateFoodDTO(food.getId(), food.getName(), food.getCalories(), food.getProteins(), food.getCarbs(), food.getFat());
+    }
 }
