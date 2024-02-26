@@ -1,6 +1,4 @@
 package com.kine.Kine.food.repository;
-import com.kine.Kine.food.dto.CreateFoodDTO;
-import com.kine.Kine.food.dto.GetFoodDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,6 +17,7 @@ public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
     @Column(nullable = false)
     private String name;
     @Column
