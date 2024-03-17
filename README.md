@@ -62,17 +62,6 @@ Structure your configuration repository as follows:
 
 Populate each `service-name.yml` with the service-specific configurations.
 
-
-```
-/config-repo
-  /discovery
-    application.yml
-  /gateway
-    application.yml
-  /food-service
-    application.yml
-```
-
 Here's an example of what each `service-name.yml` might contain. Customize each according to the specific needs of the service it configures:
 
 #### discovery.yml
