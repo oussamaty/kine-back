@@ -2,8 +2,6 @@
 
 Kine is an innovative app designed to revolutionize the way users track their nutrition and physical activity. By integrating with smart devices, Kine offers real-time data synchronization, meal planning, and comprehensive activity tracking, all aimed at enhancing the user's health and wellness journey.
 
-For organizing the sections of your README into a linked list for easy navigation, you can structure it as follows:
-
 ## Table of Contents
 
 - [Technologies Used](#technologies-used)
