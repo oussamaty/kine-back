@@ -1,0 +1,22 @@
+server:
+  port: ${CONFIG_PORT}
+
+spring:
+  application:
+    name: ${CONFIG_SERVICE_ID}
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${SPRING_CONFIG_GIT_LOCAL_URI}
+  security:
+    user:
+      name: ${CONFIG_USER}
+      password: ${CONFIG_PASSWORD}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_URL}
+    region: default
+    registry-fetch-interval-seconds: 30

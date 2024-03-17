@@ -7,10 +7,12 @@ import com.kine.service.food.service.FoodService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 
 @RestController
@@ -21,7 +23,6 @@ public class FoodController {
     public FoodController(FoodService foodService){
         this.foodService = foodService;
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getFoodById(@PathVariable(value = "id") Long id) {
@@ -64,9 +65,7 @@ public class FoodController {
     public ResponseEntity<?> createFood(@RequestBody CreateFoodDTO createFoodDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(foodService.createFood(createFoodDTO));
-        } catch (RessourceAlreadyExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (InvalidDataException e) {
+        } catch (RessourceAlreadyExistException | InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             // Log the exception internally for debugging purposes
@@ -81,9 +80,7 @@ public class FoodController {
                                         @RequestBody UpdateFoodDTO newFoodData) {
         try{
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(foodService.updateFood(id, newFoodData));
-        } catch (RessourceAlreadyExistException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (InvalidDataException e) {
+        } catch (RessourceAlreadyExistException | InvalidDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

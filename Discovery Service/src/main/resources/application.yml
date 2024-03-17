@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    config:
+      name: ${DISCOVERY_NAME}
+  config:
+    import: "configserver:${CONFIG_URL}"

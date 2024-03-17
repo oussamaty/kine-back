@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ${GATEWAY_NAME}
+  cloud:
+    config:
+      discovery:
+        service-id: ${CONFIG_SERVICE_ID}
+        enabled: true
+      username: ${CONFIG_USER}
+      password: ${CONFIG_PASSWORD}
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+  config:
+    import: "optional:configserver:"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_URL}

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ${FOOD_SERVICE_NAME}
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: ${CONFIG_SERVICE_ID}
+      username: ${CONFIG_USER}
+      password: ${CONFIG_PASSWORD}
+    gateway:
+      locator:
+        enabled: true
+        lower-case-service-id: true
+  config:
+    import: "optional:configserver:"
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${DISCOVERY_URL}
