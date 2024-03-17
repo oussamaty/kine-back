@@ -2,6 +2,22 @@
 
 Kine is an innovative app designed to revolutionize the way users track their nutrition and physical activity. By integrating with smart devices, Kine offers real-time data synchronization, meal planning, and comprehensive activity tracking, all aimed at enhancing the user's health and wellness journey.
 
+For organizing the sections of your README into a linked list for easy navigation, you can structure it as follows:
+
+## Table of Contents
+
+- [Technologies Used](#technologies-used)
+- [Development Setup](#development-setup)
+  - [Prerequisites](#1-prerequisites)
+  - [Environment File Creation](#2-environment-file-creation)
+  - [Config Service Setup](#3-config-service-setup)
+  - [Service-Specific Configuration](#4-service-specific-configuration)
+  - [Keycloak Setup](#5-keycloak-setup)
+  - [Launching the Architecture](#6-launching-the-architecture)
+  - [Testing the Backend](#7-testing-the-backend)
+- [Conclusion](#conclusion)
+- [Special Thanks](#special-thanks)
+
 ## Technologies Used
 
 - **Spring Boot**: Powers the backend services, providing a robust framework for building microservices, including the config service and food-service, with ease and efficiency.
@@ -11,21 +27,21 @@ Kine is an innovative app designed to revolutionize the way users track their nu
 - **Docker & Docker Compose**: Ensures consistent environments and simplifies deployment with containerization, orchestrating the application's services with ease.
 - **Eureka (Spring Cloud Netflix Eureka)**: Facilitates service discovery, enabling microservices to locate and communicate with each other in a dynamic, cloud-based architecture.
 
-## Prerequisites
+
+## Development Setup
+
+### 1. Prerequisites
 
 - Docker and Docker Compose installed on your machine.
 - Git installed and configured.
 - Access to a terminal or command prompt.
 
 
-## Development Setup
-
-
-### 1. Environment File Creation
+### 2. Environment File Creation
 
 Begin by creating a `.env` file at the root of your project. This file will contain environment variables crucial for the setup process. We will populate this file with necessary variables as we progress.
 
-### 2. Config Service Setup
+### 3. Config Service Setup
 
 Configure the Config Service by specifying the Git URI of your configuration repository. Add the following entry to your `.env` file:
 
@@ -33,7 +49,7 @@ Configure the Config Service by specifying the Git URI of your configuration rep
 SPRING_CONFIG_GIT_URI=<Your-Git-Configuration-URI>
 ```
 
-### 3. Service-Specific Configuration
+### 4. Service-Specific Configuration
 
 For the Config Service to manage each service's configuration effectively, create a `service-name.yml` file within the configuration repository for each service: `discovery`, `gateway`, and `food-service`. The filename should match the service name for Config Server to correctly associate the configuration.
 
@@ -169,7 +185,7 @@ eureka:
     registry-fetch-interval-seconds: 30
 ```
 
-### 4. Keycloak Setup
+### 5. Keycloak Setup
 
    Modify your `/etc/hosts` file by adding an entry for Keycloak to point to `127.0.0.1`. This step ensures that `keycloak` hostname resolves to your local machine:
 
@@ -207,7 +223,7 @@ eureka:
 
    Import the `realm-export.json` file to configure the realm with the necessary settings, clients, roles, and users.
 
-### 5. Launching the Architecture
+### 6. Launching the Architecture
 
 With the Config Service and Keycloak ready, you can start the remaining components of your architecture. Ensure to start each service sequentially, allowing each component time to initialize before starting the next.
 
@@ -237,7 +253,7 @@ With the Config Service and Keycloak ready, you can start the remaining componen
    docker-compose up -d gateway food-service
    ```
 
-### 6. Testing the Backend
+### 7. Testing the Backend
 
 To test the backend and ensure everything is functioning as expected, follow these steps:
 
