@@ -294,3 +294,7 @@ Following these steps allows you to securely test the backend services using the
 ## Conclusion
 
 This backend setup leverages powerful technologies like Spring Boot, Keycloak, and Docker to provide a secure, scalable foundation for our nutrition and activity tracking app. Following the setup and PKCE authentication instructions ensures a seamless development experience. Designed for flexibility and scalability, this guide aims to kickstart your journey towards innovating in health and wellness.
+
+## Special Thanks
+
+A heartfelt thank you goes out to [Jérôme Wacongne](https://github.com/ch4mpy). Your tutorials and insightful responses on StackOverflow have been instrumental in navigating the complexities of Keycloak.
