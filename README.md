@@ -18,9 +18,7 @@ Kine is an innovative app designed to revolutionize the way users track their nu
 - Access to a terminal or command prompt.
 
 
-## Configuration Setup
-
-To successfully run the application locally, each microservice requires its specific configuration. We leverage Spring Cloud Config Server to centralize and manage these configurations externally. Follow these steps to set up each service:
+## Development Setup
 
 
 ### 1. Environment File Creation
@@ -171,7 +169,7 @@ eureka:
     registry-fetch-interval-seconds: 30
 ```
 
-### 4. **Keycloak Setup**:
+### 4. Keycloak Setup
 
    Modify your `/etc/hosts` file by adding an entry for Keycloak to point to `127.0.0.1`. This step ensures that `keycloak` hostname resolves to your local machine:
 
