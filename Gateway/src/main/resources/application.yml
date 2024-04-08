@@ -3,6 +3,7 @@ spring:
     name: ${GATEWAY_NAME}
   cloud:
     config:
+      fail-fast: true
       discovery:
         service-id: ${CONFIG_SERVICE_ID}
         enabled: true

@@ -3,6 +3,7 @@ spring:
     name: ${FOOD_SERVICE_NAME}
   cloud:
     config:
+      fail-fast: true
       discovery:
         enabled: true
         service-id: ${CONFIG_SERVICE_ID}
