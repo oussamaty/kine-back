@@ -1,0 +1,12 @@
+GET http://localhost:8080/api/v1/plan
+Content-Type: application/json
+
+{
+  "gender":  "Female",
+  "birthdate": "04-03-1990",
+  "height":  165,
+  "weight":  70,
+  "target":  60,
+  "timeHorizon": 12 ,
+  "activityLevel":  "Moderately Active"
+}

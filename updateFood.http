@@ -1,0 +1,10 @@
+
+PUT http://localhost:8080/api/food/2
+Content-Type: application/json
+
+{
+  "fat": 34
+}
+
+
+
