@@ -19,7 +19,7 @@ public class PlanController {
         this.planService = planService;
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<?> createPlan(@RequestBody Request request) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(planService.createPlan(request));
