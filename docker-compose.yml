@@ -2,6 +2,8 @@ version: "3"
 services:
   food-db:
     image: postgres:16-alpine
+    ports:
+      - '5432:5432'
     networks:
       - backend
     environment:
@@ -55,6 +57,13 @@ services:
       - .env
     depends_on:
       - food-db
+
+  calculator-service:
+    image: kine/calculator-service:latest
+    networks:
+      - backend
+    env_file:
+      - .env
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1

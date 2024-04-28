@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    Page<Food> findFoodByName(String name,Pageable pageable);
+    Page<Food> findFoodByName(String name, Pageable pageable);
 
     Optional<Food> findFoodById(long id);
 

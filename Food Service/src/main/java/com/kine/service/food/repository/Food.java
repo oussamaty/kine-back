@@ -1,14 +1,15 @@
 package com.kine.service.food.repository;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -21,6 +22,8 @@ public class Food {
     @Column(nullable = false)
     private String name;
     @Column
+    private float energie;
+    @Column
     private float calories;
     @Column
     private float proteins;
@@ -28,6 +31,16 @@ public class Food {
     private float carbs;
     @Column
     private float fat;
+    @Column
+    private float saturatedFat;
+    @Column
+    private float sugar;
+    @Column
+    private float sodium;
+    @Column
+    private float salt;
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Serving> servings;
 
     public Food(long id, String name, float calories, float proteins, float carbs, float fat) {
         this.id = id;
@@ -37,9 +50,4 @@ public class Food {
         this.carbs = carbs;
         this.fat = fat;
     }
-
-    public Food() {
-
-    }
-
 }
