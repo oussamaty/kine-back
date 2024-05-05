@@ -1,22 +1,22 @@
 server:
-  port: ${CONFIG_PORT}
+  port: 8080
 
 spring:
   application:
-    name: ${CONFIG_SERVICE_ID}
+    name: config
   cloud:
     config:
       server:
         git:
-          uri: ${SPRING_CONFIG_GIT_LOCAL_URI}
+          uri: https://github.com/oussamaty/kine-config
   security:
     user:
-      name: ${CONFIG_USER}
-      password: ${CONFIG_PASSWORD}
+      name: user
+      password: password
 
 eureka:
   client:
     service-url:
-      defaultZone: ${DISCOVERY_URL}
+      defaultZone: http://discovery:8080/eureka/
     region: default
-    registry-fetch-interval-seconds: 30
+    registry-fetch-interval-seconds: 10

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-db
+  template:
+    metadata:
+      labels:
+        app: food-db
+    spec:
+      containers:
+        - name: food-db
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: FOOD_DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: FOOD_DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: FOOD_DB_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: food-db-volume
+      volumes:
+        - name: food-db-volume
+          persistentVolumeClaim:
+            claimName: food-db-pvc

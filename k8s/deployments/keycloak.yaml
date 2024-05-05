@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:24.0.1
+          args: ["start"]
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          env:
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: KEYCLOAK_ADMIN
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: KEYCLOAK_ADMIN_PASSWORD
+            - name: KC_HOSTNAME_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: KC_FRONTEND_URL
+            - name: KC_HOSTNAME_ADMIN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: KC_ADMIN_URL
+            - name: KC_DB
+              value: 'postgres'
+            - name: KC_DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: AUTH_DB_URL
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: AUTH_DB_USER
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: AUTH_DB_PASSWORD
+            - name: KC_HEALTH_ENABLED
+              value: 'true'
+            - name: KC_PROXY_ADDRESS_FORWARDING
+              value: 'true'
+            - name: KC_HOSTNAME_DEBUG
+              value: 'true'
+          volumeMounts:
+            - mountPath: /opt/keycloak/data/import
+              name: keycloak-realms-volume
+      volumes:
+        - name: keycloak-realms-volume
+          hostPath:
+            path: ./resources/realms
+            type: Directory
