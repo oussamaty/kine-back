@@ -1,4 +1,4 @@
 .idea
 *.env
-realm-export.json
+realms/realm-export.json
 .gradle

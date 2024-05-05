@@ -73,7 +73,9 @@ services:
     networks:
       - backend
     command:
-      - start-dev
+      - start
+    volumes:
+      - ./realms:/opt/keycloak/data/import
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
