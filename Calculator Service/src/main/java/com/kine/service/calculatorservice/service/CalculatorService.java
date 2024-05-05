@@ -6,6 +6,8 @@ import com.kine.service.calculatorservice.exceptions.UnrealisticTimeFrame;
 import com.kine.service.calculatorservice.model.TDEERequest;
 import com.kine.service.calculatorservice.model.TDEEResponse;
 import org.springframework.stereotype.Service;
+import com.kine.service.calculatorservice.constants.Gender;
+import com.kine.service.calculatorservice.constants.ActivityLevel;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -43,26 +45,19 @@ public class CalculatorService {
         throw new UnrealisticTimeFrame("The time frame is not recommended");
     }
 
-    private double calculateBMR(String gender, double height, double weight, long age) {
-        if (gender.equals("Female")) {
-            return 10 * weight + 6.25 * height - 5 * age - 161;
-        }
-        return 10 * weight + 6.25 * height - 5 * age + 5;
+    private double calculateBMR(Gender gender, double height, double weight, long age) {
+        return switch (gender) {
+            case FEMALE -> 10 * weight + 6.25 * height - 5 * age - 161;
+            case MALE -> 10 * weight + 6.25 * height - 5 * age + 5;
+            case NON_SPECIFIED -> 10 * weight + 6.25 * height - 5 * age + 5;
+        };
     }
 
     private double calculateBMI(double weight, double height) {
         return 10000 * weight/ (height * height);
     }
 
-    private double calculateTDEE(double BMI, String activityLevel) {
-        Map<String, Double> activityCoefficients = Map.of(
-                "Sedentary", 1.2,
-                "Lightly Active", 1.375,
-                "Moderately Active", 1.55,
-                "Very Active", 1.725,
-                "Extra Active", 1.9
-        );
-        return BMI*activityCoefficients.get(activityLevel);
-    }
-
-}
+    private double calculateTDEE(double BMI, ActivityLevel activityLevel) {
+        return BMI * activityLevel.getCoefficient();
+    };
+};
