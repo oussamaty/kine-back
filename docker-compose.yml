@@ -73,7 +73,7 @@ services:
     networks:
       - backend
     command:
-      - start
+      - start-dev
     volumes:
       - ./realms:/opt/keycloak/data/import
     environment:
@@ -88,6 +88,7 @@ services:
       KC_HEALTH_ENABLED: true
       KC_PROXY_ADDRESS_FORWARDING: true
       KC_HOSTNAME_DEBUG: true
+
     depends_on:
       - auth-db
 
