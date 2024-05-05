@@ -74,6 +74,8 @@ services:
       - backend
     command:
       - start-dev
+    volumes:
+      - ./realms:/opt/keycloak/data/import
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
@@ -86,6 +88,7 @@ services:
       KC_HEALTH_ENABLED: true
       KC_PROXY_ADDRESS_FORWARDING: true
       KC_HOSTNAME_DEBUG: true
+
     depends_on:
       - auth-db
 
