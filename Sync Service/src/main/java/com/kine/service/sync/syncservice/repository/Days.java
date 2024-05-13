@@ -14,9 +14,11 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "Days")
-public class Days {
+public class Days implements EntityRepo {
     @Id
     @Column(nullable = false)
+    private String id;
+    @Column
     private String date;
     @Column
     private Number totalCalories;

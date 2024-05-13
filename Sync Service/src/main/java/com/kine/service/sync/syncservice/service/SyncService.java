@@ -10,9 +10,12 @@ import com.kine.service.sync.syncservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import java.util.HashMap;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.kine.service.sync.syncservice.constants.ChangesType.*;
 
@@ -45,29 +48,64 @@ public class SyncService {
         return pullResponse;
     }
 
-    public PushResponse push(PushRequest pushRequest) {
+    public void push(PushRequest pushRequest) {
+        Map<String, ChangeDetails> changesMap = pushRequest.getChangesMap();
+
+        Map<String, JpaRepository<EntityRepo ,String>> classNameMapping = new HashMap<>();
+        classNameMapping.put("days", daysRepository);
+        classNameMapping.put("daily_meals", dailyMealsRepository);
+        classNameMapping.put("food_items", foodItemsRepository);
+        classNameMapping.put("food", foodRepository);
+        classNameMapping.put("servings", servingsRepository);
+
+        for (Map.Entry<String, ChangeDetails> entry : changesMap.entrySet()) {
+            String tableName = entry.getKey();
+            ChangeDetails changeDetails = entry.getValue();
+
+            for (EntityDTO createdEntity : changeDetails.getCreated()) {
+                createRecord(createdEntity, daysRepository );
+            }
+
+
+            for (EntityDTO updatedEntity : changeDetails.getUpdated()) {
+                updateRecord(updatedEntity, );
+            }
+
+            for (String deletedEntity : changeDetails.getDeleted()) {
+                deleteRecord(deletedEntity, );
+            }
+        }
+
 
     }
 
-    private <T1> void createRecord(T1 record, JpaRepository repository){
+    private void createRecord(EntityDTO record, JpaRepository<EntityRepo, String> repository){
         repository.save(record.toEntity(CREATED));
     }
 
-    private <T1, T2> void updateRecord(T1 record, T2 repository){
+    private void updateRecord(EntityDTO record, JpaRepository<EntityRepo, String> repository){
         repository.save(record.toEntity(UPDATED));
     }
 
+    private void deleteRecord(String recordId, JpaRepository<EntityRepo, String> repository){
+        Optional<EntityRepo> existingEntityOptional = repository.findById(recordId);
+        if (existingEntityOptional.isEmpty()) {
+            return;
+        }
+        EntityRepo existingEntity = existingEntityOptional.get();
+        existingEntity.setChangesType(DELETED);
+    }
 
-    private ChangeDetails<DaysDTO> getChangesForDays(List<Days> entities) {
-        ChangeDetails<DaysDTO> changeDetails = new ChangeDetails<DaysDTO>();
+    private ChangeDetails getChangesForDays(List<Days> entities) {
+        ChangeDetails changeDetails = new ChangeDetails();
 
         for (Days entity : entities) {
             switch (entity.getChangesType()) {
                 case CREATED:
-                    changeDetails.getCreated().add(new DaysDTO(entity.getDate(), entity.getTotalCalories(), entity.getTotalProtein(), entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
+                    changeDetails.getCreated().add(new DaysDTO(entity.getId(), entity.getDate(), entity.getTotalCalories(), entity.getTotalProtein(), entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
                     break;
                 case UPDATED:
-                    changeDetails.getUpdated().add(new DaysDTO(entity.getDate(), entity.getTotalCalories(), entity.getTotalProtein(), entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
+                    changeDetails.getUpdated().add(new DaysDTO(entity.getId(), entity.getDate(), entity.getTotalCalories(), entity.getTotalProtein(), entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
                     break;
                 case DELETED:
                     changeDetails.getDeleted().add(entity.getDate());
@@ -77,16 +115,16 @@ public class SyncService {
         return changeDetails;
     }
 
-    private ChangeDetails<DailyMealsDTO> getChangesForDailyMeals(List<DailyMeals> entities) {
-        ChangeDetails<DailyMealsDTO> changeDetails = new ChangeDetails<DailyMealsDTO>();
+    private ChangeDetails getChangesForDailyMeals(List<DailyMeals> entities) {
+        ChangeDetails changeDetails = new ChangeDetails();
 
         for (DailyMeals entity : entities) {
             switch (entity.getChangesType()) {
                 case CREATED:
-                    changeDetails.getCreated().add(new DailyMealsDTO(entity.getDayId(), entity.getType(), entity.getTotalCalories(),entity.getTotalProtein() ,entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
+                    changeDetails.getCreated().add(new DailyMealsDTO(entity.getId(), entity.getDayId(), entity.getType(), entity.getTotalCalories(),entity.getTotalProtein() ,entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
                     break;
                 case UPDATED:
-                    changeDetails.getUpdated().add(new DailyMealsDTO(entity.getDayId(), entity.getType(), entity.getTotalCalories(),entity.getTotalProtein() ,entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
+                    changeDetails.getUpdated().add(new DailyMealsDTO(entity.getId(), entity.getDayId(), entity.getType(), entity.getTotalCalories(),entity.getTotalProtein() ,entity.getTotalCarbs(), entity.getTotalFats(), entity.getTargetCalories(), entity.getTargetProtein(), entity.getTargetCarbs(), entity.getTargetFats()));
                     break;
                 case DELETED:
                     changeDetails.getDeleted().add(entity.getType());
@@ -96,35 +134,16 @@ public class SyncService {
         return changeDetails;
     }
 
-    private ChangeDetails<FoodDTO> getChangesForFood(List<Food> entities) {
-        ChangeDetails<FoodDTO> changeDetails = new ChangeDetails<FoodDTO>();
+    private ChangeDetails getChangesForFood(List<Food> entities) {
+        ChangeDetails changeDetails = new ChangeDetails();
 
         for (Food entity : entities) {
             switch (entity.getChangesType()) {
                 case CREATED:
-                    changeDetails.getCreated().add(new FoodDTO(entity.getFoodId(), entity.getName(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
+                    changeDetails.getCreated().add(new FoodDTO(entity.getId(), entity.getFoodId(), entity.getName(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
                     break;
                 case UPDATED:
-                    changeDetails.getUpdated().add(new FoodDTO(entity.getFoodId(), entity.getName(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
-                    break;
-                case DELETED:
-                    changeDetails.getDeleted().add(entity.getFoodId().toString());
-                    break;
-            }
-        }
-        return changeDetails;
-    }
-
-    private ChangeDetails<FoodItemsDTO> getChangesForFoodItems(List<FoodItems> entities) {
-        ChangeDetails<FoodItemsDTO> changeDetails = new ChangeDetails<FoodItemsDTO>();
-
-        for (FoodItems entity : entities) {
-            switch (entity.getChangesType()) {
-                case CREATED:
-                    changeDetails.getCreated().add(new FoodItemsDTO(entity.getMealId(), entity.getFoodId(), entity.getQuantity(), entity.getServingId(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
-                    break;
-                case UPDATED:
-                    changeDetails.getUpdated().add(new FoodItemsDTO(entity.getMealId(), entity.getFoodId(), entity.getQuantity(), entity.getServingId(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
+                    changeDetails.getUpdated().add(new FoodDTO(entity.getId(), entity.getFoodId(), entity.getName(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
                     break;
                 case DELETED:
                     changeDetails.getDeleted().add(entity.getFoodId());
@@ -134,16 +153,35 @@ public class SyncService {
         return changeDetails;
     }
 
-    private ChangeDetails<ServingsDTO> getChangesForServing(List<Servings> entities) {
-        ChangeDetails<ServingsDTO> changeDetails = new ChangeDetails<ServingsDTO>();
+    private ChangeDetails getChangesForFoodItems(List<FoodItems> entities) {
+        ChangeDetails changeDetails = new ChangeDetails();
+
+        for (FoodItems entity : entities) {
+            switch (entity.getChangesType()) {
+                case CREATED:
+                    changeDetails.getCreated().add(new FoodItemsDTO(entity.getId(), entity.getMealId(), entity.getFoodId(), entity.getQuantity(), entity.getServingId(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
+                    break;
+                case UPDATED:
+                    changeDetails.getUpdated().add(new FoodItemsDTO(entity.getId(), entity.getMealId(), entity.getFoodId(), entity.getQuantity(), entity.getServingId(), entity.getCalories(), entity.getCarbs(), entity.getProtein(), entity.getFats()));
+                    break;
+                case DELETED:
+                    changeDetails.getDeleted().add(entity.getFoodId());
+                    break;
+            }
+        }
+        return changeDetails;
+    }
+
+    private ChangeDetails getChangesForServing(List<Servings> entities) {
+        ChangeDetails changeDetails = new ChangeDetails();
 
         for (Servings entity : entities) {
             switch (entity.getChangesType()) {
                 case CREATED:
-                    changeDetails.getCreated().add(new ServingsDTO(entity.getFoodId(), entity.getName(), entity.getAmount()));
+                    changeDetails.getCreated().add(new ServingsDTO(entity.getId(), entity.getFoodId(), entity.getName(), entity.getAmount()));
                     break;
                 case UPDATED:
-                    changeDetails.getUpdated().add(new ServingsDTO(entity.getFoodId(), entity.getName(), entity.getAmount()));
+                    changeDetails.getUpdated().add(new ServingsDTO(entity.getId(), entity.getFoodId(), entity.getName(), entity.getAmount()));
                     break;
                 case DELETED:
                     changeDetails.getDeleted().add(entity.getFoodId());

@@ -14,10 +14,12 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "Food")
-public class Food {
+public class Food implements EntityRepo {
     @Id
     @Column(nullable = false)
-    private Number foodId;
+    private String id;
+    @Column
+    private String foodId;
     @Column
     private String name;
     @Column

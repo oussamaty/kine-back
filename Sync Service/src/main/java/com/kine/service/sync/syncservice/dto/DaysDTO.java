@@ -1,5 +1,6 @@
 package com.kine.service.sync.syncservice.dto;
 import com.kine.service.sync.syncservice.constants.ChangesType;
+import com.kine.service.sync.syncservice.repository.DailyMeals;
 import com.kine.service.sync.syncservice.repository.Days;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,8 @@ import java.time.ZoneId;
 @Setter
 @Getter
 @AllArgsConstructor
-public class DaysDTO {
+public class DaysDTO implements EntityDTO {
+    private String id;
     private String date;
     private Number totalCalories;
     private Number totalProtein;
@@ -25,6 +27,7 @@ public class DaysDTO {
 
     public Days toEntity(ChangesType changesType) {
         Days entity = new Days();
+        entity.setId(this.id);
         entity.setDate(this.date);
         entity.setTotalCalories(this.totalCalories);
         entity.setTotalProtein(this.totalProtein);
@@ -37,5 +40,8 @@ public class DaysDTO {
         entity.setLastChangedAt(Timestamp.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         entity.setChangesType(changesType);
         return entity;
+    }
+    public static DaysDTO createDTO(Days days) {
+        return new DaysDTO(days.getId(), days.getDate(), days.getTotalCalories(), days.getTotalProtein(), days.getTotalCarbs(), days.getTotalFats(), days.getTargetCalories(), days.getTargetProtein(), days.getTargetCarbs(), days.getTargetFats());
     }
 }

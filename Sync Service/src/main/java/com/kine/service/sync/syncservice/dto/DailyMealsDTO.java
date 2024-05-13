@@ -12,7 +12,8 @@ import java.time.ZoneId;
 @Setter
 @Getter
 @AllArgsConstructor
-public class DailyMealsDTO {
+public class DailyMealsDTO implements EntityDTO {
+    private String id;
     private String dayId;
     private String type;
     private Number totalCalories;
@@ -23,9 +24,10 @@ public class DailyMealsDTO {
     private Number targetProtein;
     private Number targetCarbs;
     private Number targetFats;
-
+    @Override
     public DailyMeals toEntity(ChangesType changesType) {
         DailyMeals entity = new DailyMeals();
+        entity.setId(this.id);
         entity.setDayId(this.dayId);
         entity.setType(this.type);
         entity.setTotalCalories(this.totalCalories);
@@ -39,5 +41,9 @@ public class DailyMealsDTO {
         entity.setLastChangedAt(Timestamp.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         entity.setChangesType(changesType);
         return entity;
+    }
+
+    public static DailyMealsDTO createDTO(DailyMeals dailyMeals) {
+        return new DailyMealsDTO(dailyMeals.getId(), dailyMeals.getDayId(), dailyMeals.getType(), dailyMeals.getTotalCalories(), dailyMeals.getTotalProtein(), dailyMeals.getTotalCarbs(), dailyMeals.getTotalFats(), dailyMeals.getTargetCalories(), dailyMeals.getTargetProtein(), dailyMeals.getTargetCarbs(), dailyMeals.getTargetFats());
     }
 }

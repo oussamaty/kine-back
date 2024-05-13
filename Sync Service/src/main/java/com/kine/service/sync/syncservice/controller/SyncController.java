@@ -34,7 +34,8 @@ public class SyncController {
     @PostMapping
     public ResponseEntity<?> push(@RequestBody PushRequest pushRequest) {
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(syncService.push(pushRequest));
+            syncService.push(pushRequest);
+            return ResponseEntity.status(HttpStatus.OK).body("Success");
         } catch (Exception e) {
             logger.error("An error occurred while retrieving data", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");

@@ -5,9 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
-public interface FoodItemsRepository extends JpaRepository<FoodItems, String> {
+public interface FoodItemsRepository extends JpaRepository<FoodItems, String>  {
     List<FoodItems> findByLastChangedAtAfter(Timestamp timestamp);
 }

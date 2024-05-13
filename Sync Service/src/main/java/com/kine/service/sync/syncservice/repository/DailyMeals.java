@@ -18,10 +18,12 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "DailyMeals")
-public class DailyMeals {
+public class DailyMeals implements EntityRepo {
 
     @Id
     @Column(nullable = false)
+    private String id;
+    @Column
     private String dayId;
     @Column
     private String type;
