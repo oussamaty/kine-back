@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/calculator")
+@RequestMapping("/v1/calculator")
 public class CalculatorController {
     private final CalculatorService calculatorService;
     private static final Logger logger = LoggerFactory.getLogger(CalculatorController.class);

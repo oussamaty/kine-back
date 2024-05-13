@@ -25,7 +25,7 @@ public class Serving {
     private Food food;
 
     @Column
-    private float quantity;
+    private Float quantity;
 
     @Column
     private String unit;

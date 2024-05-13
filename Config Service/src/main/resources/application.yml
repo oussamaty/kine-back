@@ -1,5 +1,5 @@
 server:
-  port: ${CONFIG_PORT}
+  port: 8080
 
 spring:
   application:
@@ -8,13 +8,17 @@ spring:
     config:
       server:
         git:
-          uri: ${SPRING_CONFIG_GIT_LOCAL_URI}
+          uri: ${SPRING_CONFIG_GIT_URI}
+          default-label: master
+          clone-on-start: true
   security:
     user:
       name: ${CONFIG_USER}
       password: ${CONFIG_PASSWORD}
 
 eureka:
+  instance:
+    hostname: ${CONFIG_SERVICE_ID}
   client:
     service-url:
       defaultZone: ${DISCOVERY_URL}

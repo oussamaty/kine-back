@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 
 @RestController
-@RequestMapping("/api/v1/food")
+@RequestMapping("/v1/food")
 public class FoodController {
     private final FoodService foodService;
     private static final Logger logger = LoggerFactory.getLogger(FoodController.class);

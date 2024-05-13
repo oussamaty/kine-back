@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: food-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-service
+  template:
+    metadata:
+      labels:
+        app: food-service
+    spec:
+      containers:
+        - name: food-service
+          image: kinefit/food-service:latest
+          envFrom:
+            - secretRef:
+                name: kine-secrets
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: ssl-certs

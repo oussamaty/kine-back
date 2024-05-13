@@ -6,19 +6,22 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 public class WebSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
-
         http.authorizeHttpRequests(requests -> requests
                 .anyRequest().authenticated());
 
         http.httpBasic(Customizer.withDefaults());
+
+        http.csrf(AbstractHttpConfigurer::disable);
+
+        http.sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.NEVER));
 
         return http.build();
     }
