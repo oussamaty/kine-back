@@ -7,11 +7,12 @@ import lombok.Setter;
 public class GetFoodDTO {
     private long id;
     private String name;
-    private float calories;
-    private float proteins;
-    private float carbs;
-    private float fat;
-    public GetFoodDTO(long id, String name, float calories, float proteins, float carbs, float fat) {
+    private Float calories;
+    private Float proteins;
+    private Float carbs;
+    private Float fat;
+
+    public GetFoodDTO(long id, String name, Float calories, Float proteins, Float carbs, Float fat) {
         this.id = id;
         this.name = name;
         this.calories = calories;

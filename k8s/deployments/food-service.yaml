@@ -18,3 +18,11 @@ spec:
           envFrom:
             - secretRef:
                 name: kine-secrets
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: ssl-certs

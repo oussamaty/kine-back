@@ -22,23 +22,23 @@ public class Food {
     @Column(nullable = false)
     private String name;
     @Column
-    private float energie;
+    private Float energie;
     @Column
-    private float calories;
+    private Float calories;
     @Column
-    private float proteins;
+    private Float proteins;
     @Column
-    private float carbs;
+    private Float carbs;
     @Column
-    private float fat;
+    private Float fat;
     @Column
-    private float saturatedFat;
+    private Float saturatedFat;
     @Column
-    private float sugar;
+    private Float sugar;
     @Column
-    private float sodium;
+    private Float sodium;
     @Column
-    private float salt;
+    private Float salt;
     @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Serving> servings;
 

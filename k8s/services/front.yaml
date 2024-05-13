@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: food-db
+  name: front
 spec:
   type: ClusterIP
   selector:
-    app: food-db
+    app: front
   ports:
-    - name: postgres
+    - name: http
       protocol: TCP
-      port: 5432
-      targetPort: 5432
+      port: 80

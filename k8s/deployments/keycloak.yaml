@@ -14,11 +14,9 @@ spec:
     spec:
       containers:
         - name: keycloak
-          image: quay.io/keycloak/keycloak:24.0.1
-          args: ["start"]
-          ports:
-            - containerPort: 8080
-            - containerPort: 8443
+          image: keycloak/keycloak:24.0.1
+          args:
+            - "start"
           env:
             - name: KEYCLOAK_ADMIN
               valueFrom:
@@ -35,18 +33,16 @@ spec:
                 secretKeyRef:
                   name: kine-secrets
                   key: KC_FRONTEND_URL
+            - name: KC_HOSTNAME_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: KC_HTTP_RELATIVE_PATH
             - name: KC_HOSTNAME_ADMIN_URL
               valueFrom:
                 secretKeyRef:
                   name: kine-secrets
                   key: KC_ADMIN_URL
-            - name: KC_DB
-              value: 'postgres'
-            - name: KC_DB_URL
-              valueFrom:
-                secretKeyRef:
-                  name: kine-secrets
-                  key: AUTH_DB_URL
             - name: KC_DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -57,17 +53,36 @@ spec:
                 secretKeyRef:
                   name: kine-secrets
                   key: AUTH_DB_PASSWORD
-            - name: KC_HEALTH_ENABLED
+            - name: KC_DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: AUTH_DB_URL
+            - name: AUTH_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: AUTH_DB_NAME
+            - name: DB_CERT
+              valueFrom:
+                secretKeyRef:
+                  name: kine-secrets
+                  key: DB_CERT
+            - name: KC_DB
+              value: 'postgres'
+            - name: KC_HOSTNAME_STRICT
+              value: 'false'
+            - name: KC_HTTP_ENABLED
               value: 'true'
-            - name: KC_PROXY_ADDRESS_FORWARDING
-              value: 'true'
-            - name: KC_HOSTNAME_DEBUG
+            - name: KC_PROXY_HEADERS
+              value: 'xforwarded'
+            - name: KC_METRICS_ENABLED
               value: 'true'
           volumeMounts:
-            - mountPath: /opt/keycloak/data/import
-              name: keycloak-realms-volume
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+              readOnly: true
       volumes:
-        - name: keycloak-realms-volume
-          hostPath:
-            path: ./resources/realms
-            type: Directory
+        - name: ssl-certs
+          secret:
+            secretName: ssl-certs

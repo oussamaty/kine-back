@@ -3,20 +3,24 @@ server:
 
 spring:
   application:
-    name: config
+    name: ${CONFIG_SERVICE_ID}
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/oussamaty/kine-config
+          uri: ${SPRING_CONFIG_GIT_URI}
+          default-label: master
+          clone-on-start: true
   security:
     user:
-      name: user
-      password: password
+      name: ${CONFIG_USER}
+      password: ${CONFIG_PASSWORD}
 
 eureka:
+  instance:
+    hostname: ${CONFIG_SERVICE_ID}
   client:
     service-url:
-      defaultZone: http://discovery:8080/eureka/
+      defaultZone: ${DISCOVERY_URL}
     region: default
-    registry-fetch-interval-seconds: 10
+    registry-fetch-interval-seconds: 30

@@ -1,5 +1,7 @@
 .idea
 *.env
-realms/realm-export.json
 .gradle
 k8s/secrets
+certs
+token
+kubeconfig.yml
