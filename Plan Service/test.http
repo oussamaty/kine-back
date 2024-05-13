@@ -1,0 +1,12 @@
+POST http://localhost:8080/api/v1/plan
+Content-Type: application/json
+
+{
+  "gender": "FEMALE",
+  "birthdate": "1990-05-10",
+  "height": 165,
+  "weight": 70,
+  "target": 60,
+  "timeHorizon": 12,
+  "activityLevel": "MODERATELY_ACTIVE"
+}

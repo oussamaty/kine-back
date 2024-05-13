@@ -1,0 +1,11 @@
+POST http://localhost:8080/api/food
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "ses",
+  "calories": 1101,
+  "proteins": 50,
+  "carbs": 7,
+  "fat": 69
+}
